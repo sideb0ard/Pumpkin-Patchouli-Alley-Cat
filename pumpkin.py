@@ -3,9 +3,12 @@
 
 import argparse
 import asyncio
-import functools
+# import functools
 import logging
 import sys
+# import time
+
+# from concurrent.futures import ProcessPoolExecutor
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -14,7 +17,12 @@ logging.basicConfig(
 )
 log = logging.getLogger('main')
 
+
 SERVER_ADDRESS = ('localhost', 10000)
+
+blinky_stage = 1
+q = asyncio.Queue()
+
 
 MESSAGES = [
     b'This is the message. ',
@@ -24,6 +32,7 @@ MESSAGES = [
 
 
 class AlleyServer(asyncio.Protocol):
+
     def connection_made(self, transport):
         self.transport = transport
         self.address = transport.get_extra_info('peername')
@@ -33,7 +42,12 @@ class AlleyServer(asyncio.Protocol):
         self.log.debug('connection accepted')
 
     def data_received(self, data):
+        global blinky_stage
         self.log.debug('received {!r}'.format(data))
+        self.log.debug('Setting blinky stage to 2')
+        q.put_nowait(2)
+        self.log.debug('Q size is now {}'.format(q.qsize()))
+        blinky_stage += 1
         self.transport.write(data)
         self.log.debug('sent {!r}'.format(data))
 
@@ -89,11 +103,17 @@ class AlleyClient(asyncio.Protocol):
 
 async def blinky_lights():
     while True:
-        print("I'm a wee LED light blinking")
-        await asyncio.sleep(3)
+        # if not q.empty():
+        print("Q size is {}".format(q.qsize()))
+        print("I'm a wee LED light blinking - blinking {} randomly"
+              .format(blinky_stage))
+        # time.sleep(blinky_stage)
+        await asyncio.sleep(3.0)
 
 
 def main(master_mode=True):
+
+    # executor = ProcessPoolExecutor(2)
 
     if master_mode:
         log.debug("Running in default client mode")
@@ -106,19 +126,24 @@ def main(master_mode=True):
     server = loop.run_until_complete(factory)
     log.debug('starting up on {} port {}'.format(*SERVER_ADDRESS))
 
-    client_completed = asyncio.Future()
-    client_factory = functools.partial(
-        AlleyClient,
-        messages=MESSAGES,
-        future=client_completed,
-    )
-    factory_coroutine = loop.create_connection(
-        client_factory,
-        *SERVER_ADDRESS
-    )
+    # client_completed = asyncio.Future()
+    # client_factory = functools.partial(
+    #     AlleyClient,
+    #     messages=MESSAGES,
+    #     future=client_completed,
+    # )
+    # factory_coroutine = loop.create_connection(
+    #     client_factory,
+    #     *SERVER_ADDRESS
+    # )
 
-    loop.run_until_complete(factory_coroutine)
-    loop.run_until_complete(client_completed)
+    # loop.run_until_complete(factory_coroutine)
+    # loop.run_until_complete(client_completed)
+
+    # loop.run_until_complete(blinky_lights)
+    asyncio.ensure_future(blinky_lights())
+
+    # task = loop.create_task(slow_operation())
 
     try:
         loop.run_forever()
