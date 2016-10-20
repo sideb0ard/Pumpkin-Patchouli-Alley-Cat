@@ -18,9 +18,7 @@ log = logging.getLogger('main')
 SERVER_ADDRESS = ('localhost', 10000)
 
 MESSAGES = [
-    b'This is the message. ',
-    b'It will be sent ',
-    b'in parts.',
+    b'PING'
 ]
 
 
