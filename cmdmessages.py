@@ -1,5 +1,6 @@
 import asyncio
 import logging
+# from config import led_stage, head_servo_stage, carve_servo_stage
 
 
 class CmdReceiver(asyncio.Protocol):
@@ -16,6 +17,24 @@ class CmdReceiver(asyncio.Protocol):
         self.log.debug('received {}'.format(data))
         if data == b'PING':
             self.log.debug('Got PINGED!')
+        elif data == b'HEAD_NOD':
+            self.log.debug('Changing head_servo_stage to NOD!')
+            # head_servo_stage = 'NOD'
+        elif data == b'HEAD_TURN':
+            self.log.debug('Changing head_servo_stage to TURN!')
+            # head_servo_stage = 'TURN'
+        elif data == b'LED_RAND':
+            self.log.debug('Changing led_stage to RAND!')
+            # led_stage = 'RAND'
+        elif data == b'LED_STEADY':
+            self.log.debug('Changing led_stage to RAND!')
+            # led_stage = 'STEADY'
+        elif data == b'CARVE_ROUND':
+            self.log.debug('Changing carve_stage to RAND!')
+            # carve_servo_stage = 'ROUND'
+        elif data == b'CARVE_STAB':
+            self.log.debug('Changing carve_stage to RAND!')
+            # led_stage = 'STAB'
 
     def eof_received(self):
         self.log.debug('received EOF')
@@ -28,40 +47,3 @@ class CmdReceiver(asyncio.Protocol):
         else:
             self.log.debug('closing')
         super().connection_lost(error)
-
-
-class CmdSender(asyncio.Protocol):
-
-    def __init__(self, messages, future):
-        super().__init__()
-        self.messages = messages
-        self.log = logging.getLogger('AlleyClient')
-        self.f = future
-
-    def connection_made(self, transport):
-        self.transport = transport
-        self.address = transport.get_extra_info('peername')
-        self.log.debug(
-            'connection to {} port {}'.format(*self.address)
-        )
-        for msg in self.messages:
-            transport.write(msg)
-            self.log.debug('sending {}'.format(msg))
-        if transport.can_write_eof():
-            transport.write_eof()
-
-    def data_received(self, data):
-        self.log.debug('received {}'.format(data))
-
-    def eof_received(self):
-        self.log.debug('received EOF (client)')
-        self.transport.close()
-        if not self.f.done():
-            self.f.set_result(True)
-
-    def connection_lost(self, exc):
-        self.log.debug('server close connection')
-        self.transport.close()
-        if not self.f.done():
-            self.f.set_result(True)
-        super().connection_lost(exc)

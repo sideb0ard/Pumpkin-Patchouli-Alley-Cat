@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# needs python3 for asyncio
+# needs python >= 3.5 for asyncio
 
 import argparse
 import asyncio
@@ -13,6 +13,8 @@ from servoz import servo_controller
 from ledz import led_controller
 from timerrr import timerrr
 
+from config import server_address
+
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(name)s: %(message)s',
@@ -21,41 +23,16 @@ logging.basicConfig(
 log = logging.getLogger('main')
 
 
-SERVER_ADDRESS = ('localhost', 10000)
-CLIENTS = ['localhost']
-
-
 def main(master_mode=False):
 
     loop = asyncio.get_event_loop()
 
     if master_mode:
-        log.debug("Running in Cmd Master mode - this node "
-                  "will command: {}".format("tbd"))
+        asyncio.ensure_future(timerrr(loop))
 
-        print("[MAIN] Clients are {}".format(CLIENTS))
-        timerrr.CLIENTS = CLIENTS
-        asyncio.ensure_future(timerrr())
-        # cmd_completed = asyncio.Future()
-        # cmd_factory = functools.partial(
-        #     CmdSender,
-        #     messages=[b'PING'],
-        #     future=cmd_completed,
-        # )
-        # factory_coroutine = loop.create_connection(
-        #     cmd_factory,
-        #     *SERVER_ADDRESS
-        # )
-        # loop.run_until_complete(factory_coroutine)
-        # loop.run_until_complete(cmd_completed)
-
-    else:
-        # client mode runs a TCP server to accept new commands
-        log.debug("Running in client mode")
-
-    factory = loop.create_server(CmdReceiver, *SERVER_ADDRESS)
-    server = loop.run_until_complete(factory)
-    log.debug('starting up on {} port {}'.format(*SERVER_ADDRESS))
+    factory = loop.create_server(CmdReceiver, *server_address)
+    loop.run_until_complete(factory)
+    log.debug('Listening for commands on {} port {}'.format(*server_address))
 
     asyncio.ensure_future(led_controller())
     asyncio.ensure_future(servo_controller())
@@ -65,10 +42,7 @@ def main(master_mode=False):
     except KeyboardInterrupt:
             pass
     finally:
-        if master_mode:
-            log.debug('closing server')
-            server.close()
-            loop.run_until_complete(server.wait_closed())
+        # loop.run_until_complete(server.wait_closed())
 
         log.debug('closing event loop')
         loop.close()
