@@ -55,8 +55,6 @@ def main(host=None, master_mode=False):
     except KeyboardInterrupt:
             pass
     finally:
-        # loop.run_until_complete(server.wait_closed())
-
         log.debug('closing event loop')
         loop.close()
 
