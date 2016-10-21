@@ -1,13 +1,15 @@
 import asyncio
-from config import led_stage
+import logging
+import random
 
-async def led_controller():
+log = logging.getLogger('led_controller')
+
+async def led_controller(global_state):
     while True:
-        print("I'm a wee LED light blinking - blinking {} randomly"
-              .format(led_stage))
-        # if blinky_mode == 1:
-        #     sleepy_time = random.random() * 3
-        # else:
-        sleepy_time = 0.75
-        # print("Sleeping for {}".format(sleepy_time))
+        log.debug("I'm a wee LED light blinking - blinking {} randomly"
+                  .format(global_state.led_stage))
+        if global_state.led_stage == 'RAND':
+            sleepy_time = random.random() * 2
+        else:
+            sleepy_time = 2
         await asyncio.sleep(sleepy_time)

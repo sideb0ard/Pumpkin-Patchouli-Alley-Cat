@@ -1,11 +1,12 @@
 import asyncio
+import logging
 
-async def servo_controller():
+log = logging.getLogger('servo_controller')
 
-    movement = "nodding"
+async def servo_controller(global_state):
+
     while True:
-        print("I'm a MOVING SERVO blinking - {}"
-              .format(movement))
+        log.debug("I'm a MOVING SERVO blinking - {}"
+                  .format(global_state.head_servo_stage))
         sleepy_time = 0.5
-        # print("Sleeping for {}".format(sleepy_time))
         await asyncio.sleep(sleepy_time)

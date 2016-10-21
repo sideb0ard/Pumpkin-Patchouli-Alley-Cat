@@ -5,6 +5,10 @@ import logging
 
 class CmdReceiver(asyncio.Protocol):
 
+    def __init__(self, state):
+        super().__init__()
+        self.global_state = state
+
     def connection_made(self, transport):
         self.transport = transport
         self.address = transport.get_extra_info('peername')
@@ -19,22 +23,22 @@ class CmdReceiver(asyncio.Protocol):
             self.log.debug('Got PINGED!')
         elif data == b'HEAD_NOD':
             self.log.debug('Changing head_servo_stage to NOD!')
-            # head_servo_stage = 'NOD'
+            self.global_state.head_servo_stage = 'NOD'
         elif data == b'HEAD_TURN':
             self.log.debug('Changing head_servo_stage to TURN!')
-            # head_servo_stage = 'TURN'
+            self.global_state.head_servo_stage = 'TURN'
         elif data == b'LED_RAND':
             self.log.debug('Changing led_stage to RAND!')
-            # led_stage = 'RAND'
+            self.global_state.led_stage = 'RAND'
         elif data == b'LED_STEADY':
-            self.log.debug('Changing led_stage to RAND!')
-            # led_stage = 'STEADY'
+            self.log.debug('Changing led_stage to STEADY!')
+            self.global_state.led_stage = 'STEADY'
         elif data == b'CARVE_ROUND':
             self.log.debug('Changing carve_stage to RAND!')
-            # carve_servo_stage = 'ROUND'
+            self.global_state.carve_servo_stage = 'ROUND'
         elif data == b'CARVE_STAB':
-            self.log.debug('Changing carve_stage to RAND!')
-            # led_stage = 'STAB'
+            self.log.debug('Changing carve_stage to STAB!')
+            self.global_state.led_stage = 'STAB'
 
     def eof_received(self):
         self.log.debug('received EOF')

@@ -3,17 +3,15 @@
 
 import argparse
 import asyncio
-# import functools
+import functools
 import logging
-# import signal
 import sys
 
 from cmdmessages import CmdReceiver
-from servoz import servo_controller
-from ledz import led_controller
-from timerrr import timerrr
-
 from config import server_address
+from ledz import led_controller
+from servoz import servo_controller
+from timerrr import timerrr
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -23,19 +21,34 @@ logging.basicConfig(
 log = logging.getLogger('main')
 
 
-def main(master_mode=False):
+class state():
+    led_stage = 'RAND'  # toggle between RAND and STEADY
+    head_servo_stage = 'NOD'  # toggle between NOD and TURN
+    carve_servo_stage = 'ROUND'  # toggle between ROUND and STAB
+
+
+def main(host=None, master_mode=False):
 
     loop = asyncio.get_event_loop()
 
     if master_mode:
         asyncio.ensure_future(timerrr(loop))
 
-    factory = loop.create_server(CmdReceiver, *server_address)
-    loop.run_until_complete(factory)
+    global_state = state()
+
+    if host:
+       listen_address = (host, 10000)
+    else:
+       listen_address = server_address  # from config.py
+
+    factory = functools.partial(CmdReceiver, global_state)
+    cmd_receiver = loop.create_server(factory, *listen_address)
+
+    loop.run_until_complete(cmd_receiver)
     log.debug('Listening for commands on {} port {}'.format(*server_address))
 
-    asyncio.ensure_future(led_controller())
-    asyncio.ensure_future(servo_controller())
+    asyncio.ensure_future(led_controller(global_state))
+    asyncio.ensure_future(servo_controller(global_state))
 
     try:
         loop.run_forever()
@@ -53,8 +66,13 @@ if __name__ == "__main__":
                                                  "Pip Pip Pop Pickers!")
     parser.add_argument("-m", "--master", help="Run in Master mode",
                         action="store_true")
+
+    parser.add_argument("-l", "--listen", dest="host",
+                        help="Listen on specific IP addres")
+
     args = parser.parse_args()
+
     if args.master:
-        main(master_mode=True)
+        main(args.host, master_mode=True)
     else:
-        main()
+        main(args.host)
