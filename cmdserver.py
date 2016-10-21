@@ -3,7 +3,7 @@ import logging
 # from config import led_stage, head_servo_stage, carve_servo_stage
 
 
-class CmdReceiver(asyncio.Protocol):
+class cmd_server(asyncio.Protocol):
 
     def __init__(self, state):
         super().__init__()

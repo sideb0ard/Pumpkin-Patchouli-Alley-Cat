@@ -7,7 +7,7 @@ import functools
 import logging
 import sys
 
-from cmdmessages import CmdReceiver
+from cmdserver import cmd_server
 from config import server_address
 from ledz import led_controller
 from servoz import servo_controller
@@ -41,7 +41,7 @@ def main(host=None, master_mode=False):
     else:
        listen_address = server_address  # from config.py
 
-    factory = functools.partial(CmdReceiver, global_state)
+    factory = functools.partial(cmd_server, global_state)
     cmd_receiver = loop.create_server(factory, *listen_address)
 
     loop.run_until_complete(cmd_receiver)
