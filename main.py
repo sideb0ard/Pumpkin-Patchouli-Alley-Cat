@@ -22,7 +22,7 @@ log = logging.getLogger('main')
 
 
 class state():
-    led_stage = 'RAND'  # toggle between RAND and STEADY
+    led_stage = 'STEADY'  # toggle between RAND and STEADY
     head_servo_stage = 'NOD'  # toggle between NOD and TURN
     carve_servo_stage = 'ROUND'  # toggle between ROUND and STAB
 
@@ -47,7 +47,7 @@ def main(host=None, master_mode=False):
     loop.run_until_complete(cmd_receiver)
     log.debug('Listening for commands on {} port {}'.format(*server_address))
 
-    for p in range(160):
+    for p in range(10):
         asyncio.ensure_future(led_controller(global_state, p))
     #  asyncio.ensure_future(servo_controller(global_state))
 

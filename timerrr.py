@@ -18,12 +18,15 @@ async def send_cmd(loop, host, cmd):
 async def timerrr(loop):
     log.debug('Timerd launched')
     while True:
-        #  log.debug('Stage One - random lights')
+        # do nothing for a bit
+        await asyncio.sleep(5)
+
+        #  log.debug('Stage One - lights start steady and get more random')
         for node in nodes:
             await send_cmd(loop, node, 'LED_STEADY')
         await asyncio.sleep(10)
 
-        #  log.debug('Stage Two - SOLID lights')
+        #  log.debug('Stage Two - SYNC signal, lights become more and more sync')
         for node in nodes:
             await send_cmd(loop, node, 'LED_SYNC')
         await asyncio.sleep(10)
