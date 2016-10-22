@@ -47,7 +47,8 @@ def main(host=None, master_mode=False):
     loop.run_until_complete(cmd_receiver)
     log.debug('Listening for commands on {} port {}'.format(*server_address))
 
-    asyncio.ensure_future(led_controller(global_state))
+    for p in range(160):
+        asyncio.ensure_future(led_controller(global_state, p))
     #  asyncio.ensure_future(servo_controller(global_state))
 
     try:
