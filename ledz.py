@@ -2,6 +2,8 @@ import asyncio
 import logging
 import random
 
+import RPi.GPIO as GPIO
+
 log = logging.getLogger('led_controller')
 
 async def led_controller(global_state, pin):
@@ -12,6 +14,11 @@ async def led_controller(global_state, pin):
     LEN_PATTERN = 10  # seconds. Should match sleep time i timerrr
     MAX_DELAY = 3  # seconds
     COUNTER = 0
+
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(pin, GPIO.OUT)
+    pwm = GPIO.PWM(pin, 100)
+
 
     while True:
 
@@ -35,6 +42,9 @@ async def led_controller(global_state, pin):
             COUNTER -= sleepy_time
             if COUNTER < 0:
                 COUNTER = 0
+
+        pwm.start(0)
+        pwm.ChangeDutyCycle(random.randint(5, 100))
 
         log.debug("I'm LED light {} - blinking {} for {}"
                   .format(pin, global_state.led_stage, sleepy_time))
