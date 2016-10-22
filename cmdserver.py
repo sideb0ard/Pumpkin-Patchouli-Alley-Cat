@@ -30,9 +30,9 @@ class cmd_server(asyncio.Protocol):
         elif data == b'LED_SYNC':
             #  self.log.debug('Changing led_stage to SYNC!')
             self.global_state.led_stage = 'SYNC'
-        elif data == b'LED_STEADY':
+        elif data == b'LED_RAND':
             #  self.log.debug('Changing led_stage to STEADY!')
-            self.global_state.led_stage = 'STEADY'
+            self.global_state.led_stage = 'RAND'
         elif data == b'CARVE_ROUND':
             #  self.log.debug('Changing carve_stage to RAND!')
             self.global_state.carve_servo_stage = 'ROUND'

@@ -22,7 +22,7 @@ log = logging.getLogger('main')
 
 
 class state():
-    led_stage = 'STEADY'  # toggle between RAND and STEADY
+    led_stage = 'SYNC'  # toggle between RAND and STEADY
     head_servo_stage = 'NOD'  # toggle between NOD and TURN
     carve_servo_stage = 'ROUND'  # toggle between ROUND and STAB
 

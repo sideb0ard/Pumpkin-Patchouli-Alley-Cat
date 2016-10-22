@@ -21,7 +21,7 @@ async def timerrr(loop):
 
         # #  log.debug('Stage One - lights start steady and get more random')
         for node in nodes:
-            await send_cmd(loop, node, 'LED_STEADY')
+            await send_cmd(loop, node, 'LED_RAND')
         await asyncio.sleep(10)
 
         #  log.debug('Stage Two - SYNC signal,
@@ -30,14 +30,14 @@ async def timerrr(loop):
             await send_cmd(loop, node, 'LED_SYNC')
         await asyncio.sleep(10)
 
-        #  log.debug('Stage THREE - SCARECROW')
-        for node in nodes:
-            await send_cmd(loop, node, 'HEAD_NOD')
-            await send_cmd(loop, node, 'CARVE_ROUND')
-        await asyncio.sleep(3)
+        # #  log.debug('Stage THREE - SCARECROW')
+        # for node in nodes:
+        #     await send_cmd(loop, node, 'HEAD_NOD')
+        #     await send_cmd(loop, node, 'CARVE_ROUND')
+        # await asyncio.sleep(3)
 
-        #  log.debug('Stage FOUR - SCAREY CROW')
-        for node in nodes:
-            await send_cmd(loop, node, 'HEAD_TURN')
-            await send_cmd(loop, node, 'CARVE_STAB')
-        await asyncio.sleep(3)
+        # #  log.debug('Stage FOUR - SCAREY CROW')
+        # for node in nodes:
+        #     await send_cmd(loop, node, 'HEAD_TURN')
+        #     await send_cmd(loop, node, 'CARVE_STAB')
+        # await asyncio.sleep(3)
