@@ -16,7 +16,7 @@ async def led_controller(global_state):
     while True:
         if global_state.led_stage == 'RAND':
             sleepy_time = base_sleepy_time + \
-                (CUR_TIMER / LEN_TIMER * 2 * random.random())
+                (CUR_TIMER / LEN_TIMER * MAX_DELAY * random.random())
 
             CUR_TIMER -= sleepy_time
             if CUR_TIMER < 0:
