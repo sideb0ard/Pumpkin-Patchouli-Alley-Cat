@@ -48,7 +48,7 @@ def main(host=None, master_mode=False):
     log.debug('Listening for commands on {} port {}'.format(*server_address))
 
     asyncio.ensure_future(led_controller(global_state))
-    asyncio.ensure_future(servo_controller(global_state))
+    #  asyncio.ensure_future(servo_controller(global_state))
 
     try:
         loop.run_forever()
