@@ -27,7 +27,7 @@ async def timerrr(loop):
         #  log.debug('Stage Two - SYNC signal,
         #  lights become more and more in sync')
         for node in nodes:
-            await send_cmd(loop, node, 'LED_SYNC')
+            await send_cmd(loop, node, 'LED_STEADY')
         await asyncio.sleep(10)
 
         # #  log.debug('Stage THREE - SCARECROW')

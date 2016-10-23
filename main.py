@@ -31,9 +31,6 @@ def main(host=None, master_mode=False):
 
     loop = asyncio.get_event_loop()
 
-    if master_mode:
-        asyncio.ensure_future(timerrr(loop))
-
     global_state = state()
 
     if host:
@@ -50,6 +47,9 @@ def main(host=None, master_mode=False):
     # for p in range(10):
     asyncio.ensure_future(led_controller(global_state, 19))
     #  asyncio.ensure_future(servo_controller(global_state))
+
+    if master_mode:
+        asyncio.ensure_future(timerrr(loop))
 
     try:
         loop.run_forever()
