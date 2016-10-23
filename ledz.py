@@ -23,7 +23,7 @@ def update_counters_and_stage(global_state):
     if CUR_STAGE != global_state.led_stage:
         if global_state.led_stage == 'RAND':
             COUNTER = 0
-        elif global_state.led_stage == 'SYNC':
+        elif global_state.led_stage == 'STEADY':
             COUNTER = LEN_PATTERN
         print("Changing STATE to {}".format(global_state.led_stage))
         CUR_STAGE = global_state.led_stage
@@ -66,7 +66,7 @@ async def led_controller(global_state, pin):
 
     while True:
 
-        if CUR_STAGE == 'SYNC':
+        if CUR_STAGE == 'STEADY':
             for dc in range(0, 101, 4): # Increase duty cycle: 0~100
                 print("CURSTAGE {}".format(CUR_STAGE))
                 update_counters_and_stage(global_state)
@@ -81,6 +81,7 @@ async def led_controller(global_state, pin):
                 p.ChangeDutyCycle(dc) # Change duty cycle
                 await asyncio.sleep(sleepy_time)
         else:
+            print("CURSTAGE {}".format(CUR_STAGE))
             update_counters_and_stage(global_state)
             p.ChangeDutyCycle(brightness())
             # Randomly pause on a brightness to simulate flickering

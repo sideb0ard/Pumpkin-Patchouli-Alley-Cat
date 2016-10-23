@@ -27,9 +27,9 @@ class cmd_server(asyncio.Protocol):
         elif data == b'HEAD_TURN':
             #  self.log.debug('Changing head_servo_stage to TURN!')
             self.global_state.head_servo_stage = 'TURN'
-        elif data == b'LED_SYNC':
+        elif data == b'LED_STEADY':
             #  self.log.debug('Changing led_stage to SYNC!')
-            self.global_state.led_stage = 'SYNC'
+            self.global_state.led_stage = 'STEADY'
         elif data == b'LED_RAND':
             #  self.log.debug('Changing led_stage to STEADY!')
             self.global_state.led_stage = 'RAND'
