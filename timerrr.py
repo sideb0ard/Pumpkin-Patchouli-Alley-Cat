@@ -24,6 +24,10 @@ async def timerrr(loop):
             await send_cmd(loop, node, 'LED_RAND')
         await asyncio.sleep(10)
 
+        for node in nodes:
+            await send_cmd(loop, node, 'LED_SYNC')
+        await asyncio.sleep(10)
+
         #  log.debug('Stage Two - SYNC signal,
         #  lights become more and more in sync')
         for node in nodes:
