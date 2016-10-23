@@ -88,8 +88,8 @@ async def led_controller(global_state, pin):
                 p.ChangeDutyCycle(dc)
                 await asyncio.sleep(sleepy_time)
             elif CUR_STAGE == 'RAND':
-                p.ChangeDutyCycle(randys[i])
-                await asyncio.sleep(sleepy_time)
+                p.ChangeDutyCycle(brightness())
+                await asyncio.sleep(flicker())
             elif CUR_STAGE == 'SYNC':
                 out = (PERCENT_OF_PATTERN * randys[i]) + \
                     ((1 - PERCENT_OF_PATTERN) * dc)
