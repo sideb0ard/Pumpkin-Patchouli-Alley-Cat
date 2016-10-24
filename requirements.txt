@@ -1,2 +1,3 @@
-python-vlc==1.1.2
+PyAudio==0.2.9
 RPi.GPIO==0.6.2
+Wave==0.0.2

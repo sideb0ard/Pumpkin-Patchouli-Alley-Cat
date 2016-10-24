@@ -48,10 +48,11 @@ def main(host=None, master_mode=False):
     # for p in range(10):
     asyncio.ensure_future(led_controller(global_state, 19))
     asyncio.ensure_future(servo_controller(global_state))
-    asyncio.ensure_future(music_play(global_state))
 
     if master_mode:
         asyncio.ensure_future(timerrr(loop))
+
+    musicfinished_future = loop.run_in_executor(None, music_play, global_state)
 
     try:
         loop.run_forever()
