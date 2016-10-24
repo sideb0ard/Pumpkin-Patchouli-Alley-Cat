@@ -10,6 +10,7 @@ import sys
 from cmdserver import cmd_server
 from config import server_address
 from ledz import led_controller
+from musicplayer import music_play
 from servoz import servo_controller
 from timerrr import timerrr
 
@@ -47,6 +48,7 @@ def main(host=None, master_mode=False):
     # for p in range(10):
     asyncio.ensure_future(led_controller(global_state, 19))
     asyncio.ensure_future(servo_controller(global_state))
+    asyncio.ensure_future(music_play(global_state))
 
     if master_mode:
         asyncio.ensure_future(timerrr(loop))
