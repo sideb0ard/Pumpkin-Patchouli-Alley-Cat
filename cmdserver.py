@@ -36,12 +36,18 @@ class cmd_server(asyncio.Protocol):
         elif data == b'LED_RAND':
             #  self.log.debug('Changing led_stage to STEADY!')
             self.global_state.led_stage = 'RAND'
-        elif data == b'CARVE_ROUND':
-            #  self.log.debug('Changing carve_stage to RAND!')
+        elif data == b'head_knife_round':
+            print('Changing carve_stage to ROUND')
             self.global_state.carve_servo_stage = 'ROUND'
-        elif data == b'CARVE_STAB':
-            #  self.log.debug('Changing carve_stage to STAB!')
+        elif data == b'head_knife_stab':
+            print('Changing carve_stage to STAB!')
             self.global_state.carve_servo_stage = 'STAB'
+        elif data == b'vines_still':
+            print('Changing vines_stage to STILL!')
+            self.global_state.vines_stage = 'STILL'
+        elif data == b'vines_shake':
+            print('Changing vines_stage to SHAKE')
+            self.global_state.vines_stage = 'SHAKE'
 
     def eof_received(self):
         #  self.log.debug('received EOF')
