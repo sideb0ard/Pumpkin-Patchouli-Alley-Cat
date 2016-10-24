@@ -75,7 +75,7 @@ async def led_controller(global_state, pin):
     dcz = []
     for x in range(0, 101, 4):
         dcz.append(x)
-    for x in range(100, -1, 44):
+    for x in range(100, -1, -4):
         dcz.append(x)
 
     while True:

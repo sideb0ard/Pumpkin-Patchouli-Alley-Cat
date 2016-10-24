@@ -4,6 +4,7 @@ import wave
 
 CHUNK = 1024
 FILE = "media/lonelyjack.wav"
+# FILE = "media/yummyfur.wav"
 
 def music_play(filename):
     # open the file for reading.
@@ -19,15 +20,19 @@ def music_play(filename):
                     rate = wf.getframerate(),
                     output = True)
     
+    data = wf.readframes(CHUNK)
     while True:
-         # read data (based on the CHUNK size)
-         data = wf.readframes(CHUNK)
-         
-         # play stream (looping from beginning of file to the end)
-         while data != '':
-             # writing to the stream is what *actually* plays the sound.
-             stream.write(data)
-             data = wf.readframes(CHUNK)
+        stream.write(data)
+        # read data (based on the CHUNK size)
+        data = wf.readframes(CHUNK)
+        
+        # play stream (looping from beginning of file to the end)
+        if data == b'':
+            print("Rewinding music track")
+            # writing to the stream is what *actually* plays the sound.
+            # stream.write(data)
+            wf.rewind()
+            data = wf.readframes(CHUNK)
     
     # cleanup stuff.
     stream.close()
