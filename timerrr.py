@@ -1,32 +1,34 @@
 import asyncio
+import functools
 import logging
 
 from config import nodes
 
 log = logging.getLogger('timerrr')
 
-async def send_cmd(loop, host, cmd):
+async def send_cmd(cmd):
     #  log.debug('Sending {} to {}'.format(cmd, host))
-    reader, writer = await asyncio.open_connection(
-        host, 10000, loop=loop)
-    writer.write(cmd.encode())
+    print("YARSENDINGi {}".format(cmd))
+    # for node in nodes:
+    #     await send_cmd(loop, node, cmd)
+    #     reader, writer = await asyncio.open_connection(
+    #         host, 10000, loop=loop)
+    #     writer.write(cmd.encode())
+    #     writer.close()
 
-    #  log.debug('Close the socket')
-    writer.close()
-
-def test_blah(sumthing):
-    print("Ah yeah, {}".format(sumthing))
+def launcher(loop, cmd):
+    print("Ah yeah, {}".format(loop))
+    # loop.create_task(functools.partial(send_cmd, msg))
+    loop.create_task(send_cmd(cmd))
 
 async def timerrr(loop):
     log.debug('Timerd launched')
-    loop.call_later(0.2, test_blah, 0.2)
-    loop.call_later(2, test_blah, 2)
-    loop.call_later(5, test_blah, 5)
+    loop.call_later(0.2, launcher, loop, "BUM")
+    loop.call_later(2, launcher, loop, "TUM")
+    loop.call_later(5, launcher, loop, "RUM")
     # while True:
 
     # #  log.debug('Stage One - lights start steady and get more random')
-    # for node in nodes:
-    #     await send_cmd(loop, node, 'LED_RAND')
     # await asyncio.sleep(10)
 
     # for node in nodes:
