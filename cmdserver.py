@@ -2,6 +2,8 @@ import asyncio
 import logging
 # from config import led_stage, head_servo_stage, carve_servo_stage
 
+from timerrr import timerrr
+
 
 class cmd_server(asyncio.Protocol):
 
@@ -15,12 +17,15 @@ class cmd_server(asyncio.Protocol):
         self.log = logging.getLogger(
             'AlleyServer_{}_{}'.format(*self.address)
         )
-        #  self.log.debug('connection accepted')
+        # self.log.debug('connection accepted')
 
     def data_received(self, data):
-        #  self.log.debug('received {}'.format(data))
+        # self.log.debug('received {}'.format(data))
         if data == b'PING':
             self.log.debug('Got PINGED!')
+        elif data == b'MUSICSTART':
+            print("Kicking off timer loops")
+            asyncio.ensure_future(timerrr(self.global_state.loop))
         elif data == b'HEAD_NOD':
             #  self.log.debug('Changing head_servo_stage to NOD!')
             self.global_state.head_servo_stage = 'NOD'
@@ -50,13 +55,13 @@ class cmd_server(asyncio.Protocol):
             self.global_state.vines_stage = 'SHAKE'
 
     def eof_received(self):
-        #  self.log.debug('received EOF')
+        # self.log.debug('received EOF')
         if self.transport.can_write_eof():
             self.transport.write_eof()
 
     def connection_lost(self, error):
         if error:
             self.log.error('ERROR: {}'.format(error))
-        #  else:
-            #  self.log.debug('closing')
+        else:
+            self.log.debug('closing')
         super().connection_lost(error)

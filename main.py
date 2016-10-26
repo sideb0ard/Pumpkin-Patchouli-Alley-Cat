@@ -29,35 +29,28 @@ class state():
     head_servo_stage = 'NOD'  # toggle between NOD and TURN
     carve_servo_stage = 'ROUND'  # toggle between ROUND and STAB
     vines_stage = 'STILL' # toggle between STILL and SHAKE
+    loop = None
 
-def main(host=None, master_mode=False):
+def main(args):
 
     loop = asyncio.get_event_loop()
-
     global_state = state()
-
-    if host:
-       listen_address = (host, 10000)
-    else:
-       listen_address = server_address  # from config.py
+    global_state.loop = loop
 
     factory = functools.partial(cmd_server, global_state)
-    cmd_receiver = loop.create_server(factory, *listen_address)
+    cmd_receiver = loop.create_server(factory, *server_address)
 
     loop.run_until_complete(cmd_receiver)
     log.debug('Listening for commands on {} port {}'.format(*server_address))
 
-    # for p in range(10):
+    if args.music:
+        musicfinished_future = loop.run_in_executor(None, music_play)
+
+    if args.servo:
+        asyncio.ensure_future(head_knife_servo(global_state))
+        asyncio.ensure_future(vines_servo(global_state))
+
     asyncio.ensure_future(led_controller(global_state, 19))
-    asyncio.ensure_future(head_knife(global_state))
-    asyncio.ensure_future(vines(global_state))
-
-    if master_mode:
-        print('I am the mastah')
-    #    asyncio.ensure_future(timerrr(loop))
-        asyncio.ensure_future(servo_timer(loop))
-
-    musicfinished_future = loop.run_in_executor(None, music_play, global_state)
 
     try:
         loop.run_forever()
@@ -71,15 +64,12 @@ def main(host=None, master_mode=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Pumpkin Patchoulli "
                                                  "Pip Pip Pop Pickers!")
-    parser.add_argument("-m", "--master", help="Run in Master mode",
+    parser.add_argument("-s", "--servo", help="Run the servo controller code",
                         action="store_true")
 
-    parser.add_argument("-l", "--listen", dest="host",
-                        help="Listen on specific IP addres")
+    parser.add_argument("-m", "--music", help="Run the music and timer controller",
+                        action="store_true")
 
     args = parser.parse_args()
 
-    if args.master:
-        main(args.host, master_mode=True)
-    else:
-        main(args.host)
+    main(args)

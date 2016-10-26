@@ -1,19 +1,29 @@
-import time
+import asyncio 
+import logging
 import pyaudio
+import socket
+import time
 import wave
+
+log = logging.getLogger('musicplayer')
 
 CHUNK = 1024
 FILE = "media/lonelyjack.wav"
-# FILE = "media/yummyfur.wav"
 
-def music_play(filename):
-    # open the file for reading.
+def send_music_has_started_message():
+    print("Sending music message")
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(('localhost', 10000))
+    msg = "MUSICSTART"
+    msg_len = len(msg)
+    sent = sock.send(msg.encode())
+    if sent == 0:
+        raise RuntimeError("socket connection broken")
+
+def music_play():
+
     wf = wave.open(FILE, 'rb')
-    
-    # create an audio object
     p = pyaudio.PyAudio()
-    
-    # open stream based on the wave object which has been input.
     stream = p.open(format =
                     p.get_format_from_width(wf.getsampwidth()),
                     channels = wf.getnchannels(),
@@ -21,19 +31,16 @@ def music_play(filename):
                     output = True)
     
     data = wf.readframes(CHUNK)
+    send_music_has_started_message()
     while True:
         stream.write(data)
-        # read data (based on the CHUNK size)
         data = wf.readframes(CHUNK)
         
-        # play stream (looping from beginning of file to the end)
         if data == b'':
             print("Rewinding music track")
-            # writing to the stream is what *actually* plays the sound.
-            # stream.write(data)
             wf.rewind()
             data = wf.readframes(CHUNK)
+            send_music_has_started_message()
     
-    # cleanup stuff.
     stream.close()
     p.terminate()

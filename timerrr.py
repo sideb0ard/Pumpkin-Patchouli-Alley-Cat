@@ -14,34 +14,39 @@ async def send_cmd(loop, host, cmd):
     #  log.debug('Close the socket')
     writer.close()
 
+def test_blah(sumthing):
+    print("Ah yeah, {}".format(sumthing))
 
 async def timerrr(loop):
     log.debug('Timerd launched')
-    while True:
+    loop.call_later(0.2, test_blah, 0.2)
+    loop.call_later(2, test_blah, 2)
+    loop.call_later(5, test_blah, 5)
+    # while True:
 
-        # #  log.debug('Stage One - lights start steady and get more random')
-        for node in nodes:
-            await send_cmd(loop, node, 'LED_RAND')
-        await asyncio.sleep(10)
+    # #  log.debug('Stage One - lights start steady and get more random')
+    # for node in nodes:
+    #     await send_cmd(loop, node, 'LED_RAND')
+    # await asyncio.sleep(10)
 
-        for node in nodes:
-            await send_cmd(loop, node, 'LED_SYNC')
-        await asyncio.sleep(10)
+    # for node in nodes:
+    #     await send_cmd(loop, node, 'LED_SYNC')
+    # await asyncio.sleep(10)
 
-        #  log.debug('Stage Two - SYNC signal,
-        #  lights become more and more in sync')
-        for node in nodes:
-            await send_cmd(loop, node, 'LED_STEADY')
-        await asyncio.sleep(10)
+    # #  log.debug('Stage Two - SYNC signal,
+    # #  lights become more and more in sync')
+    # for node in nodes:
+    #     await send_cmd(loop, node, 'LED_STEADY')
+    # await asyncio.sleep(10)
 
-        # #  log.debug('Stage THREE - SCARECROW')
-        # for node in nodes:
-        #     await send_cmd(loop, node, 'HEAD_NOD')
-        #     await send_cmd(loop, node, 'CARVE_ROUND')
-        # await asyncio.sleep(3)
+    # #  log.debug('Stage THREE - SCARECROW')
+    # for node in nodes:
+    #     await send_cmd(loop, node, 'HEAD_NOD')
+    #     await send_cmd(loop, node, 'CARVE_ROUND')
+    # await asyncio.sleep(3)
 
-        # #  log.debug('Stage FOUR - SCAREY CROW')
-        # for node in nodes:
-        #     await send_cmd(loop, node, 'HEAD_TURN')
-        #     await send_cmd(loop, node, 'CARVE_STAB')
-        # await asyncio.sleep(3)
+    # #  log.debug('Stage FOUR - SCAREY CROW')
+    # for node in nodes:
+    #     await send_cmd(loop, node, 'HEAD_TURN')
+    #     await send_cmd(loop, node, 'CARVE_STAB')
+    # await asyncio.sleep(3)
