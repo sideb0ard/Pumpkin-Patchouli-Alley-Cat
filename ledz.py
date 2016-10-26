@@ -8,7 +8,7 @@ log = logging.getLogger('led_controller')
 
 CUR_STAGE = ''
 COUNTER = 0
-LEN_PATTERN = 10
+LEN_PATTERN = 15  # sync time
 PERCENT_OF_PATTERN = 0
 sleepy_time = 0.05
 

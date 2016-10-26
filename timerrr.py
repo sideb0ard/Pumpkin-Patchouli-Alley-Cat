@@ -6,49 +6,49 @@ from config import nodes
 
 log = logging.getLogger('timerrr')
 
-async def send_cmd(cmd):
-    #  log.debug('Sending {} to {}'.format(cmd, host))
-    print("YARSENDINGi {}".format(cmd))
-    # for node in nodes:
-    #     await send_cmd(loop, node, cmd)
-    #     reader, writer = await asyncio.open_connection(
-    #         host, 10000, loop=loop)
-    #     writer.write(cmd.encode())
-    #     writer.close()
+async def send_cmd(loop, cmd):
+    for node in nodes:
+        log.debug('Sending {} to {}'.format(cmd, node))
+        reader, writer = await asyncio.open_connection(
+            node, 10000, loop=loop)
+        writer.write(cmd.encode())
+        writer.close()
 
 def launcher(loop, cmd):
-    print("Ah yeah, {}".format(loop))
-    # loop.create_task(functools.partial(send_cmd, msg))
-    loop.create_task(send_cmd(cmd))
+    loop.create_task(send_cmd(loop, cmd))
 
 async def timerrr(loop):
+
     log.debug('Timerd launched')
-    loop.call_later(0.2, launcher, loop, "BUM")
-    loop.call_later(2, launcher, loop, "TUM")
-    loop.call_later(5, launcher, loop, "RUM")
-    # while True:
 
-    # #  log.debug('Stage One - lights start steady and get more random')
-    # await asyncio.sleep(10)
+    # Servo 1: Knife
+    loop.call_later(0.0, launcher, loop, "KNIFE_SERVO_ON")  # full speed
+    loop.call_later(120, launcher, loop, "KNIFE_SERVO_OFF")
 
-    # for node in nodes:
-    #     await send_cmd(loop, node, 'LED_SYNC')
-    # await asyncio.sleep(10)
+    #  Servo 2: Vines
+    loop.call_later(0.0, launcher, loop, "VINES_SERVO_ON")  # full speed
+    loop.call_later(300, launcher, loop, "VINES_SERVO_OFF")
 
-    # #  log.debug('Stage Two - SYNC signal,
-    # #  lights become more and more in sync')
-    # for node in nodes:
-    #     await send_cmd(loop, node, 'LED_STEADY')
-    # await asyncio.sleep(10)
+    #  Servo 3: Head Y axis (look up)
+    loop.call_later(0.0, launcher, loop, "HEAD_Y_OFF") 
+    loop.call_later(120, launcher, loop, "HEAD_Y_ON_FWD")  # full speed
+    loop.call_later(123, launcher, loop, "HEAD_Y_OFF")
+    loop.call_later(163, launcher, loop, "HEAD_Y_ON_RWD")
+    loop.call_later(166, launcher, loop, "HEAD_Y_OFF")
 
-    # #  log.debug('Stage THREE - SCARECROW')
-    # for node in nodes:
-    #     await send_cmd(loop, node, 'HEAD_NOD')
-    #     await send_cmd(loop, node, 'CARVE_ROUND')
-    # await asyncio.sleep(3)
+    #  Servo 4: Head X axis (turn to side)
+    loop.call_later(0.0, launcher, loop, "HEAD_X_OFF") 
+    loop.call_later(120, launcher, loop, "HEAD_X_ON_FWD")  # full speed
+    loop.call_later(123, launcher, loop, "HEAD_X_OFF")
+    loop.call_later(162, launcher, loop, "HEAD_X_ON_RWD")  # full speed
+    loop.call_later(165, launcher, loop, "HEAD_X_OFF")
 
-    # #  log.debug('Stage FOUR - SCAREY CROW')
-    # for node in nodes:
-    #     await send_cmd(loop, node, 'HEAD_TURN')
-    #     await send_cmd(loop, node, 'CARVE_STAB')
-    # await asyncio.sleep(3)
+    #  Lantern lights: 160 pins
+    loop.call_later(0.0, launcher, loop, "LED_RAND") 
+    loop.call_later(105, launcher, loop, "LED_SYNC") 
+    loop.call_later(120, launcher, loop, "LED_STEADY") 
+
+    #  Face lights: 1 pin
+    loop.call_later(0, launcher, loop, "FACE_LED_OFF") 
+    loop.call_later(123, launcher, loop, "FACE_LED_ON") 
+    loop.call_later(165, launcher, loop, "FACE_LED_OFF") 
