@@ -4,7 +4,7 @@ After=sound.target
  
 [Service]
 User=pi
-ExecStart=/home/pi/Code/Pumpkin-Patchouli-Alley-Cat/main.py -m
+ExecStart=/home/pi/Code/Pumpkin-Patchouli-Alley-Cat/main.py
 Restart=always
  
 [Install]
