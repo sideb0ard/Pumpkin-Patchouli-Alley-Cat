@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/home/pi/Code/Pumpkin-Patchouli-Alley-Cat/venv/bin/python
 # needs python >= 3.5 for asyncio
 
 import argparse

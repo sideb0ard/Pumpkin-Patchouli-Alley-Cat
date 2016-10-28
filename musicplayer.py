@@ -5,10 +5,12 @@ import socket
 import time
 import wave
 
+from subprocess import call
+
 log = logging.getLogger('musicplayer')
 
 CHUNK = 1024
-FILE = "media/lonelyjack.wav"
+FILE = "/home/pi/Code/Pumpkin-Patchouli-Alley-Cat/media/lonelyjack.wav"
 
 def send_music_has_started_message():
     print("Sending music message")
@@ -21,6 +23,8 @@ def send_music_has_started_message():
         raise RuntimeError("socket connection broken")
 
 def music_play():
+
+    call(["/home/pi/Code/Pumpkin-Patchouli-Alley-Cat/startpulse.sh"])
 
     wf = wave.open(FILE, 'rb')
     p = pyaudio.PyAudio()

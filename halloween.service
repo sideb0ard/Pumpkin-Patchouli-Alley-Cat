@@ -1,0 +1,12 @@
+[Unit]
+Description=Halloween Controller
+After=sound.target
+ 
+[Service]
+User=pi
+ExecStart=/home/pi/Code/Pumpkin-Patchouli-Alley-Cat/main.py -m
+Restart=always
+ 
+[Install]
+WantedBy=multi-user.target
+Alias=halloween.service
