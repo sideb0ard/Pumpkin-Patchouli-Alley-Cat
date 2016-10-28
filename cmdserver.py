@@ -26,23 +26,21 @@ class cmd_server(asyncio.Protocol):
         elif data == b'MUSICSTART':
             print("Kicking off timer loops")
             asyncio.ensure_future(timerrr(self.global_state.loop))
-        elif data == b'HEAD_NOD':
-            #  self.log.debug('Changing head_servo_stage to NOD!')
-            self.global_state.head_servo_stage = 'NOD'
+        elif data == b'HEAD_STILL':
+            self.global_state.head_servo_stage = 'STILL'
         elif data == b'HEAD_TURN':
-            #  self.log.debug('Changing head_servo_stage to TURN!')
             self.global_state.head_servo_stage = 'TURN'
+        elif data == b'KNIFE_STAB':
+            self.global_state.knife_servo_stage = 'CARVE'
+        elif data == b'KNIFE_STILL':
+            self.global_state.knife_servo_stage = 'STILL'
         elif data == b'LED_STEADY':
-            #  self.log.debug('Changing led_stage to SYNC!')
             self.global_state.led_stage = 'STEADY'
         elif data == b'LED_OFF':
-            #  self.log.debug('Changing led_stage to SYNC!')
             self.global_state.led_stage = 'OFF'
         elif data == b'LED_SYNC':
-            #  self.log.debug('Changing led_stage to SYNC!')
             self.global_state.led_stage = 'SYNC'
         elif data == b'LED_RAND':
-            #  self.log.debug('Changing led_stage to STEADY!')
             self.global_state.led_stage = 'RAND'
         elif data == b'head_knife_round':
             print('Changing carve_stage to ROUND')

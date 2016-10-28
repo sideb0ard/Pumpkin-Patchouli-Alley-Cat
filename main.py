@@ -11,10 +11,10 @@ from cmdserver import cmd_server
 from config import server_address
 from ledz import led_controller
 from musicplayer import music_play
-from head_knife import head_knife
-from vines import vines
-from timerrr import timerrr
-from servo_timer import servo_timer
+from head import head_servo
+from knife import knife_servo
+# from timerrr import timerrr
+# from servo_timer import servo_timer
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -28,7 +28,7 @@ class state():
     led_stage = 'RAND'  # toggle between RAND, SYNC and STEADY
     head_servo_stage = 'NOD'  # toggle between NOD and TURN
     carve_servo_stage = 'ROUND'  # toggle between ROUND and STAB
-    vines_stage = 'STILL' # toggle between STILL and SHAKE
+    knife_stage = 'CARVE' # toggle between CARVE and STILL
     loop = None
 
 def main(args):
@@ -47,8 +47,8 @@ def main(args):
         musicfinished_future = loop.run_in_executor(None, music_play)
 
     if args.servo:
-        asyncio.ensure_future(head_knife_servo(global_state))
-        asyncio.ensure_future(vines_servo(global_state))
+        asyncio.ensure_future(head_servo(global_state))
+        asyncio.ensure_future(knife_servo(global_state))
 
     asyncio.ensure_future(led_controller(global_state, 19))
 
