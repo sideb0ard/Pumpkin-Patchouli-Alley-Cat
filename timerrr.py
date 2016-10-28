@@ -44,9 +44,12 @@ async def timerrr(loop):
     loop.call_later(165, launcher, loop, "HEAD_X_OFF")
 
     #  Lantern lights: 160 pins
-    loop.call_later(0.0, launcher, loop, "LED_RAND") 
-    loop.call_later(105, launcher, loop, "LED_SYNC") 
-    loop.call_later(120, launcher, loop, "LED_STEADY") 
+    loop.call_later(0.0, launcher, loop, "LED_RAND")
+    loop.call_later(59, launcher, loop, "LED_SYNC")
+    loop.call_later(71, launcher, loop, "LED_STEADY")
+    loop.call_later(120, launcher, loop, "LED_RAND")
+    loop.call_later(134, launcher, loop, "LED_SYNC")
+    loop.call_later(154, launcher, loop, "LED_STEADY")
 
     #  Face lights: 1 pin
     loop.call_later(0, launcher, loop, "FACE_LED_OFF") 
