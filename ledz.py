@@ -87,6 +87,9 @@ async def led_controller(global_state, pin):
             if CUR_STAGE == 'STEADY':
                 p.ChangeDutyCycle(dc)
                 await asyncio.sleep(sleepy_time)
+            if CUR_STAGE == 'OFF':
+                p.ChangeDutyCycle(0)
+                await asyncio.sleep(sleepy_time)
             elif CUR_STAGE == 'RAND':
                 p.ChangeDutyCycle(brightness())
                 await asyncio.sleep(flicker())

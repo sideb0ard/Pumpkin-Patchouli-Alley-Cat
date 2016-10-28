@@ -35,6 +35,9 @@ class cmd_server(asyncio.Protocol):
         elif data == b'LED_STEADY':
             #  self.log.debug('Changing led_stage to SYNC!')
             self.global_state.led_stage = 'STEADY'
+        elif data == b'LED_OFF':
+            #  self.log.debug('Changing led_stage to SYNC!')
+            self.global_state.led_stage = 'OFF'
         elif data == b'LED_SYNC':
             #  self.log.debug('Changing led_stage to SYNC!')
             self.global_state.led_stage = 'SYNC'
